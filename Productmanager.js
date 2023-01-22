@@ -1,50 +1,52 @@
 class ProductManager {
-    
-    constructor() {
-        this.eventos = [];
+    constructor(){
+        this.products = [] ;
     }
 
-    getEventos = () => {
-        return this.eventos;
+getProducts = () => {
+    return this.products;
+}
+
+addProduct = (title, description, price, thumbnail, code, stock, id) => {
+    const product = {
+        title,
+        description,
+        price,
+        thumbnail,
+        code,
+        stock,
+        id
+    }
+    if(this.products.find(prod => prod.code === product.code)) {
+        return console.error(`El producto con el code: ${product.code} ya existe`);
     }
 
-    agregarEvento = (title, description, price, thumbnail, code, stock) => {
-        const evento = {
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock, 
-        }
-        
-        if (this.eventos.length === 0) {
-            evento.id = 1;
-        } else {
-            evento.id = this.eventos[this.eventos.length - 1].id + 1;
-        }
+    if (this.products.length === 0) {
+        product.id = 0;
+    } else {
+        product.id = this.products[this.products.length -1].id +1;
+}
+this.products.push(product);
+console.log(`Se agrego ${product.title}`);
+}
 
-        this.eventos.push(evento);
-    }
-
-    addProduct = (idEvento, idUsuario) => {
-        const eventoIndex = this.eventos.findIndex(e=>e.id === idEvento);
-
-        if (eventoIndex === -1) {
-            console.log('Evento no encontrado');
-            return;
-        }
-
-        const usuarioRegistrado = this.eventos[eventoIndex].participantes.includes(idUsuario);
-
-        if (usuarioRegistrado) {
-            console.log('usuario ya registrado');
-            return;
-        }
-
-        this.eventos[eventoIndex].participantes.push(idUsuario);
+getProductsById = (id) => {
+    const product = this.products.find(prod => prod.id === id);
+    if (!product){
+        return "Not Found";
+    } else {
+        return `El producto con el id: ${product.id} existe, y se llama ${product.title}`;
     }
 }
 
-const manejadorEventos = new ProductManager();
-console.log(manejadorEventos.getEventos());
+}
+
+const productManager = new ProductManager();
+console.log(productManager.getProducts());
+productManager.addProduct("Producto Prueba", "este es un producto prueba", 1000, "sin imagen", "code123", 25);
+console.log(productManager.products)
+productManager.addProduct("producto prueba 2", "este es un producto prueba", 1000, "sin imagen", "code123", 25);
+productManager.addProduct("producto prueba 2", "este es un producto prueba", 1000, "sin imagen", "code12345", 25)
+console.log(productManager.products)
+console.log(productManager.getProductsById(2))
+console.log(productManager.getProductsById(1))
